@@ -3,7 +3,7 @@ spring:
     activate:
       on-profile: local
   datasource:
-    url: jdbc:mysql://localhost:3306/muneo?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    url: jdbc:postgresql://localhost:5432/muneo
     username: ${LOCAL_DB_USERNAME}
     password: ${LOCAL_DB_PASSWORD}
   jpa:
