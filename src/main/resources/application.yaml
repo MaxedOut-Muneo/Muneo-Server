@@ -3,6 +3,11 @@ spring:
     name: muneo-server
   profiles:
     default: local
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT}
+      password: ${REDIS_PASSWORD:}
   datasource:
     driver-class-name: org.postgresql.Driver
   jpa:
@@ -35,5 +40,11 @@ app:
       secret: ${JWT_SECRET}
       access-token-expiration: ${JWT_ACCESS_TOKEN_EXPIRATION}
       refresh-token-expiration: ${JWT_REFRESH_TOKEN_EXPIRATION}
+    cookie:
+      access-token-name: access_token
+      refresh-token-name: refresh_token
+      same-site: Lax
+      domain: ${COOKIE_DOMAIN:}
+      secure: ${COOKIE_SECURE:false}
   cors:
     allowed-origins: ${CORS_ALLOWED_ORIGINS}
