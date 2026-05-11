@@ -1,0 +1,44 @@
+package com.example.muneoserver.global.security.config;
+
+import java.util.List;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+
+@ConfigurationProperties(prefix = "app")
+public record SecurityProperties(
+        Security security,
+        Cors cors
+) {
+
+    public Jwt jwt() {
+        return security.jwt();
+    }
+
+    public Cookie cookie() {
+        return security.cookie();
+    }
+
+    public record Security(
+            Jwt jwt,
+            Cookie cookie
+    ) {
+    }
+
+    public record Cors(List<String> allowedOrigins) {
+    }
+
+    public record Jwt(
+            String secret,
+            long accessTokenExpiration,
+            long refreshTokenExpiration
+    ) {
+    }
+
+    public record Cookie(
+            String accessTokenName,
+            String refreshTokenName,
+            String sameSite,
+            String domain,
+            boolean secure
+    ) {
+    }
+}
