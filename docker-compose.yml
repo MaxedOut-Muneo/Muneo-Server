@@ -20,6 +20,7 @@ services:
       PROD_DB_URL: ${PROD_DB_URL}
       PROD_DB_USERNAME: ${PROD_DB_USERNAME}
       PROD_DB_PASSWORD: ${PROD_DB_PASSWORD}
+      DDL_AUTO: ${DDL_AUTO:-validate}
     depends_on:
       redis:
         condition: service_healthy
