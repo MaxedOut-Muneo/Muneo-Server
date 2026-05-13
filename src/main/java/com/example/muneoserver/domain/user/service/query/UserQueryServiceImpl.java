@@ -20,6 +20,9 @@ public class UserQueryServiceImpl implements UserQueryService {
     public UserResponse getMyInfo(Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new CommonException(ErrorCode.USER_NOT_FOUND));
+        if (user.isDeleted()) {
+            throw new CommonException(ErrorCode.USER_NOT_FOUND);
+        }
         return UserResponse.from(user);
     }
 }

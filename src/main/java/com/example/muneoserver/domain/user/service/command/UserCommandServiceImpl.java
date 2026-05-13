@@ -1,5 +1,6 @@
 package com.example.muneoserver.domain.user.service.command;
 
+import com.example.muneoserver.domain.user.domain.AuthProvider;
 import com.example.muneoserver.domain.user.domain.User;
 import com.example.muneoserver.domain.user.repository.UserRepository;
 import com.example.muneoserver.domain.user.service.command.dto.AuthResult;
@@ -46,8 +47,12 @@ public class UserCommandServiceImpl implements UserCommandService {
 
     @Override
     public AuthResult login(LoginCommand command) {
-        User user = userRepository.findByEmail(command.email())
+        User user = userRepository.findByEmailAndAuthProvider(command.email(), AuthProvider.LOCAL)
                 .orElseThrow(() -> new CommonException(ErrorCode.INVALID_LOGIN_INFO));
+
+        if (user.isDeleted()) {
+            throw new CommonException(ErrorCode.USER_NOT_FOUND);
+        }
 
         if (!passwordEncoder.matches(command.password(), user.getPassword())) {
             throw new CommonException(ErrorCode.INVALID_LOGIN_INFO);
@@ -72,6 +77,9 @@ public class UserCommandServiceImpl implements UserCommandService {
 
         User user = userRepository.findById(authUser.id())
                 .orElseThrow(() -> new CommonException(ErrorCode.USER_NOT_FOUND));
+        if (user.isDeleted()) {
+            throw new CommonException(ErrorCode.USER_NOT_FOUND);
+        }
 
         return issueTokens(user);
     }
