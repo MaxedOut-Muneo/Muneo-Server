@@ -1,5 +1,6 @@
 package com.example.muneoserver.domain.user.dto;
 
+import com.example.muneoserver.domain.user.domain.AuthProvider;
 import com.example.muneoserver.domain.user.domain.User;
 import com.example.muneoserver.domain.user.domain.UserRole;
 import java.time.LocalDate;
@@ -10,6 +11,8 @@ public record UserResponse(
         String name,
         String phoneNumber,
         LocalDate birthDate,
+        AuthProvider authProvider,
+        boolean profileCompleted,
         UserRole role
 ) {
     public static UserResponse from(User user) {
@@ -19,6 +22,8 @@ public record UserResponse(
                 user.getName(),
                 user.getPhoneNumber(),
                 user.getBirthDate(),
+                user.getAuthProvider(),
+                user.isProfileCompleted(),
                 user.getRole()
         );
     }
