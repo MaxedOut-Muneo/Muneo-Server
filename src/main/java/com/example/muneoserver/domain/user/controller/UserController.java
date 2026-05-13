@@ -3,6 +3,8 @@ package com.example.muneoserver.domain.user.controller;
 import com.example.muneoserver.domain.user.dto.LoginRequest;
 import com.example.muneoserver.domain.user.dto.SignUpRequest;
 import com.example.muneoserver.domain.user.dto.UserResponse;
+import com.example.muneoserver.domain.user.dto.profile.LocalProfileUpdateRequest;
+import com.example.muneoserver.domain.user.dto.profile.SocialProfileUpdateRequest;
 import com.example.muneoserver.domain.user.service.UserFacadeService;
 import com.example.muneoserver.global.dto.ApiResponse;
 import com.example.muneoserver.global.security.auth.AuthUser;
@@ -14,7 +16,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -61,5 +65,30 @@ public class UserController {
     @GetMapping("/me")
     public ResponseEntity<ApiResponse<UserResponse>> me(@AuthenticationPrincipal AuthUser authUser) {
         return ResponseEntity.ok(ApiResponse.success(userFacadeService.me(authUser), "내 정보 조회에 성공했습니다."));
+    }
+
+    @PatchMapping("/me/local")
+    public ResponseEntity<ApiResponse<UserResponse>> updateLocalProfile(
+            @AuthenticationPrincipal AuthUser authUser,
+            @Valid @RequestBody LocalProfileUpdateRequest request
+    ) {
+        return ResponseEntity.ok(ApiResponse.success(userFacadeService.updateLocalProfile(authUser, request), "일반 회원 정보 수정에 성공했습니다."));
+    }
+
+    @PatchMapping("/me/social")
+    public ResponseEntity<ApiResponse<UserResponse>> updateSocialProfile(
+            @AuthenticationPrincipal AuthUser authUser,
+            @Valid @RequestBody SocialProfileUpdateRequest request
+    ) {
+        return ResponseEntity.ok(ApiResponse.success(userFacadeService.updateSocialProfile(authUser, request), "소셜 회원 정보 수정에 성공했습니다."));
+    }
+
+    @DeleteMapping("/me")
+    public ResponseEntity<ApiResponse<Void>> withdraw(
+            @AuthenticationPrincipal AuthUser authUser,
+            HttpServletResponse response
+    ) {
+        userFacadeService.withdraw(authUser, response);
+        return ResponseEntity.ok(ApiResponse.success(null, "회원 탈퇴가 완료되었습니다."));
     }
 }
