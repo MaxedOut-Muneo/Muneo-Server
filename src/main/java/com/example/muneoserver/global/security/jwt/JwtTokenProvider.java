@@ -1,5 +1,6 @@
 package com.example.muneoserver.global.security.jwt;
 
+import com.example.muneoserver.domain.user.domain.AuthProvider;
 import com.example.muneoserver.domain.user.domain.User;
 import com.example.muneoserver.domain.user.domain.UserRole;
 import com.example.muneoserver.global.security.auth.AuthUser;
@@ -48,6 +49,8 @@ public class JwtTokenProvider {
         return new AuthUser(
                 Long.valueOf(claims.getSubject()),
                 claims.get("email", String.class),
+                AuthProvider.valueOf(claims.get("authProvider", String.class)),
+                Boolean.TRUE.equals(claims.get("profileCompleted", Boolean.class)),
                 UserRole.valueOf(claims.get("role", String.class))
         );
     }
@@ -66,7 +69,9 @@ public class JwtTokenProvider {
         Instant now = Instant.now();
         return Jwts.builder()
                 .subject(String.valueOf(user.getId()))
-                .claim("email", user.getEmail())
+                .claim("email", user.getEmail() == null ? "" : user.getEmail())
+                .claim("authProvider", user.getAuthProvider().name())
+                .claim("profileCompleted", user.isProfileCompleted())
                 .claim("role", user.getRole().name())
                 .issuedAt(Date.from(now))
                 .expiration(Date.from(now.plusSeconds(expirationSeconds)))
