@@ -10,6 +10,23 @@ spring:
       password: ${REDIS_PASSWORD:}
   datasource:
     driver-class-name: org.postgresql.Driver
+  security:
+    oauth2:
+      client:
+        registration:
+          kakao:
+            client-id: ${KAKAO_CLIENT_ID}
+            client-secret: ${KAKAO_CLIENT_SECRET}
+            client-name: kakao
+            authorization-grant-type: authorization_code
+            client-authentication-method: client_secret_post
+            redirect-uri: https://api.muneo.ai.kr/login/oauth2/code/kakao
+        provider:
+          kakao:
+            authorization-uri: https://kauth.kakao.com/oauth/authorize
+            token-uri: https://kauth.kakao.com/oauth/token
+            user-info-uri: https://kapi.kakao.com/v2/user/me
+            user-name-attribute: id
   jpa:
     open-in-view: false
     hibernate:
@@ -43,8 +60,17 @@ app:
     cookie:
       access-token-name: access_token
       refresh-token-name: refresh_token
-      same-site: Lax
+      same-site: ${COOKIE_SAME_SITE:Lax}
       domain: ${COOKIE_DOMAIN:}
       secure: ${COOKIE_SECURE:false}
+    oauth:
+      frontend-success-uri: ${OAUTH_FRONTEND_SUCCESS_URI:http://localhost:3000/auth/callback/success}
+      frontend-signup-uri: ${OAUTH_FRONTEND_SIGNUP_URI:http://localhost:3000/auth/callback/signup}
+      frontend-failure-uri: ${OAUTH_FRONTEND_FAILURE_URI:http://localhost:3000/auth/callback/error}
+      social-signup-ticket-expiration: ${OAUTH_SOCIAL_SIGNUP_TICKET_EXPIRATION:1800}
+    email:
+      enabled: ${EMAIL_FEATURE_ENABLED:false}
+      verification-code-expiration: ${EMAIL_VERIFICATION_CODE_EXPIRATION:300}
+      password-reset-code-expiration: ${PASSWORD_RESET_CODE_EXPIRATION:300}
   cors:
     allowed-origins: ${CORS_ALLOWED_ORIGINS}

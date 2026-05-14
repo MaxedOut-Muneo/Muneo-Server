@@ -17,9 +17,19 @@ public record SecurityProperties(
         return security.cookie();
     }
 
+    public Oauth oauth() {
+        return security.oauth();
+    }
+
+    public Email email() {
+        return security.email();
+    }
+
     public record Security(
             Jwt jwt,
-            Cookie cookie
+            Cookie cookie,
+            Oauth oauth,
+            Email email
     ) {
     }
 
@@ -39,6 +49,21 @@ public record SecurityProperties(
             String sameSite,
             String domain,
             boolean secure
+    ) {
+    }
+
+    public record Oauth(
+            String frontendSuccessUri,
+            String frontendSignupUri,
+            String frontendFailureUri,
+            long socialSignupTicketExpiration
+    ) {
+    }
+
+    public record Email(
+            boolean enabled,
+            long verificationCodeExpiration,
+            long passwordResetCodeExpiration
     ) {
     }
 }

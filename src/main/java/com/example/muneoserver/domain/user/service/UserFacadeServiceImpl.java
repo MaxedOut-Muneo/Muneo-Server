@@ -3,10 +3,19 @@ package com.example.muneoserver.domain.user.service;
 import com.example.muneoserver.domain.user.dto.LoginRequest;
 import com.example.muneoserver.domain.user.dto.SignUpRequest;
 import com.example.muneoserver.domain.user.dto.UserResponse;
+import com.example.muneoserver.domain.user.dto.email.EmailCodeSendRequest;
+import com.example.muneoserver.domain.user.dto.email.EmailCodeVerifyRequest;
+import com.example.muneoserver.domain.user.dto.oauth.OAuthLoginUrlResponse;
+import com.example.muneoserver.domain.user.dto.password.PasswordResetRequest;
+import com.example.muneoserver.domain.user.dto.profile.LocalProfileUpdateRequest;
+import com.example.muneoserver.domain.user.dto.profile.SocialProfileUpdateRequest;
+import com.example.muneoserver.domain.user.dto.social.SocialSignUpRequest;
+import com.example.muneoserver.domain.user.service.account.UserAccountService;
 import com.example.muneoserver.domain.user.service.command.UserCommandService;
 import com.example.muneoserver.domain.user.service.command.dto.AuthResult;
 import com.example.muneoserver.domain.user.service.command.dto.LoginCommand;
 import com.example.muneoserver.domain.user.service.command.dto.SignUpCommand;
+import com.example.muneoserver.domain.user.service.oauth.OAuth2LoginService;
 import com.example.muneoserver.domain.user.service.query.UserQueryService;
 import com.example.muneoserver.global.error.exception.CommonException;
 import com.example.muneoserver.global.error.exception.ErrorCode;
@@ -28,6 +37,8 @@ public class UserFacadeServiceImpl implements UserFacadeService {
 
     private final UserCommandService userCommandService;
     private final UserQueryService userQueryService;
+    private final UserAccountService userAccountService;
+    private final OAuth2LoginService oAuth2LoginService;
     private final AuthCookieManager authCookieManager;
     private final JwtTokenProvider jwtTokenProvider;
 
@@ -80,6 +91,52 @@ public class UserFacadeServiceImpl implements UserFacadeService {
     public UserResponse me(AuthUser authUser) {
         validateAuthenticated(authUser);
         return userQueryService.getMyInfo(authUser.id());
+    }
+
+    @Override
+    public OAuthLoginUrlResponse kakaoLoginUrl() {
+        return new OAuthLoginUrlResponse("kakao", oAuth2LoginService.getKakaoLoginUrl());
+    }
+
+    @Override
+    public UserResponse completeSocialSignUp(SocialSignUpRequest request, HttpServletResponse response) {
+        return oAuth2LoginService.completeSocialSignUp(request, response);
+    }
+
+    @Override
+    public UserResponse updateLocalProfile(AuthUser authUser, LocalProfileUpdateRequest request) {
+        return userAccountService.updateLocalProfile(authUser, request);
+    }
+
+    @Override
+    public UserResponse updateSocialProfile(AuthUser authUser, SocialProfileUpdateRequest request) {
+        return userAccountService.updateSocialProfile(authUser, request);
+    }
+
+    @Override
+    public void withdraw(AuthUser authUser, HttpServletResponse response) {
+        userAccountService.withdraw(authUser);
+        authCookieManager.clearAuthCookies(response);
+    }
+
+    @Override
+    public void sendEmailVerificationCode(EmailCodeSendRequest request) {
+        userAccountService.sendEmailVerificationCode(request);
+    }
+
+    @Override
+    public void verifyEmailCode(EmailCodeVerifyRequest request) {
+        userAccountService.verifyEmailCode(request);
+    }
+
+    @Override
+    public void sendPasswordResetCode(EmailCodeSendRequest request) {
+        userAccountService.sendPasswordResetCode(request);
+    }
+
+    @Override
+    public void resetPassword(PasswordResetRequest request) {
+        userAccountService.resetPassword(request);
     }
 
     private void validatePasswordConfirm(String password, String passwordConfirm) {
