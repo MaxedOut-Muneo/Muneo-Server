@@ -87,7 +87,7 @@ jobs:
 
             echo "${DOCKERHUB_TOKEN}" | docker login -u "${DOCKERHUB_USERNAME}" --password-stdin
 
-            docker compose pull app redis
-            docker compose up -d --remove-orphans app redis
+            docker compose pull app redis nginx
+            docker compose up -d --remove-orphans app redis nginx
 
             docker image prune -f
