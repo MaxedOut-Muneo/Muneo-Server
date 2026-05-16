@@ -4,6 +4,7 @@ import com.example.muneoserver.domain.ai.dto.ChatRequest;
 import com.example.muneoserver.domain.ai.dto.EstimateGenerateRequest;
 import com.example.muneoserver.domain.ai.dto.EstimateSaveRequest;
 import com.example.muneoserver.domain.ai.dto.RiskAnalyzeRequest;
+import com.example.muneoserver.domain.ai.dto.RiskReportSaveRequest;
 import com.example.muneoserver.domain.ai.repository.AiApiRepository;
 import com.example.muneoserver.global.error.exception.CommonException;
 import com.example.muneoserver.global.error.exception.ErrorCode;
@@ -46,6 +47,21 @@ public class AiServiceImpl implements AiService {
     @Override
     public ResponseEntity<Object> analyzeRisk(RiskAnalyzeRequest request) {
         return aiApiRepository.analyzeRisk(request);
+    }
+
+    @Override
+    public ResponseEntity<Object> saveRiskReport(AuthUser authUser, RiskReportSaveRequest request) {
+        return aiApiRepository.saveRiskReport(requireAuthUser(authUser), request);
+    }
+
+    @Override
+    public ResponseEntity<Object> getRiskReports(AuthUser authUser) {
+        return aiApiRepository.getRiskReports(requireAuthUser(authUser));
+    }
+
+    @Override
+    public ResponseEntity<Object> deleteRiskReport(AuthUser authUser, String reportId) {
+        return aiApiRepository.deleteRiskReport(requireAuthUser(authUser), reportId);
     }
 
     private String requireAuthUser(AuthUser authUser) {
