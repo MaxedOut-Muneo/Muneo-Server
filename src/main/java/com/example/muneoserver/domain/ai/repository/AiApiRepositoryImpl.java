@@ -5,6 +5,7 @@ import com.example.muneoserver.domain.ai.dto.ChatRequest;
 import com.example.muneoserver.domain.ai.dto.EstimateGenerateRequest;
 import com.example.muneoserver.domain.ai.dto.EstimateSaveRequest;
 import com.example.muneoserver.domain.ai.dto.RiskAnalyzeRequest;
+import com.example.muneoserver.domain.ai.dto.RiskReportSaveRequest;
 import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -77,6 +78,21 @@ public class AiApiRepositoryImpl implements AiApiRepository {
         }
 
         return exchange(HttpMethod.POST, "/risk-detector/analyze", null, formData, MediaType.MULTIPART_FORM_DATA);
+    }
+
+    @Override
+    public ResponseEntity<Object> saveRiskReport(String userId, RiskReportSaveRequest request) {
+        return exchange(HttpMethod.POST, "/risk-detector/save", userId, request, MediaType.APPLICATION_JSON);
+    }
+
+    @Override
+    public ResponseEntity<Object> getRiskReports(String userId) {
+        return exchange(HttpMethod.GET, "/risk-detector", userId, null, null);
+    }
+
+    @Override
+    public ResponseEntity<Object> deleteRiskReport(String userId, String reportId) {
+        return exchange(HttpMethod.DELETE, "/risk-detector/" + reportId, userId, null, null);
     }
 
     private ResponseEntity<Object> exchange(
