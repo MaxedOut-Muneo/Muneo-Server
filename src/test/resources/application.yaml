@@ -55,3 +55,9 @@ app:
       password-reset-code-expiration: 300
   cors:
     allowed-origins: http://localhost:3000
+  s3:
+    bucket: test-bucket
+    region: ap-northeast-2
+    presigned-url-expiration: 10m
+    estimate-directory: estimate
+    post-directory: post
