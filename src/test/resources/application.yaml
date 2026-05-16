@@ -33,6 +33,10 @@ server:
   port: 0
 
 app:
+  ai:
+    base-url: http://127.0.0.1:8000
+    connect-timeout-ms: 1000
+    read-timeout-ms: 1000
   security:
     jwt:
       secret: test-secret-key-test-secret-key-test-secret-key
