@@ -153,11 +153,26 @@ public class User extends BaseTimeEntity {
         this.birthDate = birthDate;
     }
 
+    public void updateByAdmin(String email, String name, String phoneNumber, LocalDate birthDate) {
+        this.email = email;
+        this.name = name;
+        this.phoneNumber = phoneNumber;
+        this.birthDate = birthDate;
+    }
+
+    public void changeRole(UserRole role) {
+        this.role = role;
+    }
+
     public void markEmailVerified() {
         this.emailVerified = true;
     }
 
     public void withdraw() {
         this.deleted = true;
+    }
+
+    public void restore() {
+        this.deleted = false;
     }
 }

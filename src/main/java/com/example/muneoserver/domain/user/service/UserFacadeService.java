@@ -20,6 +20,8 @@ public interface UserFacadeService {
 
     UserResponse login(LoginRequest request, HttpServletResponse response);
 
+    UserResponse adminLogin(LoginRequest request, HttpServletResponse response);
+
     UserResponse refresh(HttpServletRequest request, HttpServletResponse response);
 
     void logout(AuthUser authUser, HttpServletResponse response);
