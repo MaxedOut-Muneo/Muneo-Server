@@ -71,6 +71,16 @@ public class UserFacadeServiceImpl implements UserFacadeService {
     }
 
     @Override
+    public UserResponse adminLogin(LoginRequest request, HttpServletResponse response) {
+        AuthResult authResult = userCommandService.adminLogin(
+                new LoginCommand(request.email(), request.password())
+        );
+
+        setAuthCookies(response, authResult);
+        return UserResponse.from(authResult.user());
+    }
+
+    @Override
     public UserResponse refresh(HttpServletRequest request, HttpServletResponse response) {
         String refreshToken = resolveCookie(request, authCookieManager.getRefreshTokenCookieName())
                 .orElseThrow(() -> new CommonException(ErrorCode.INVALID_TOKEN, "리프레시 토큰 쿠키가 없습니다."));

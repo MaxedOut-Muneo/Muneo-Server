@@ -10,6 +10,8 @@ public interface UserCommandService {
 
     AuthResult login(LoginCommand command);
 
+    AuthResult adminLogin(LoginCommand command);
+
     AuthResult refresh(String refreshToken);
 
     void logout(Long userId);

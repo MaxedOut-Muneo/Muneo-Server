@@ -2,6 +2,7 @@ package com.example.muneoserver.domain.user.service.command;
 
 import com.example.muneoserver.domain.user.domain.AuthProvider;
 import com.example.muneoserver.domain.user.domain.User;
+import com.example.muneoserver.domain.user.domain.UserRole;
 import com.example.muneoserver.domain.user.repository.UserRepository;
 import com.example.muneoserver.domain.user.service.command.dto.AuthResult;
 import com.example.muneoserver.domain.user.service.command.dto.LoginCommand;
@@ -47,15 +48,16 @@ public class UserCommandServiceImpl implements UserCommandService {
 
     @Override
     public AuthResult login(LoginCommand command) {
-        User user = userRepository.findByEmailAndAuthProvider(command.email(), AuthProvider.LOCAL)
-                .orElseThrow(() -> new CommonException(ErrorCode.INVALID_LOGIN_INFO));
+        User user = authenticateLocalUser(command);
+        return issueTokens(user);
+    }
 
-        if (user.isDeleted()) {
-            throw new CommonException(ErrorCode.USER_NOT_FOUND);
-        }
+    @Override
+    public AuthResult adminLogin(LoginCommand command) {
+        User user = authenticateLocalUser(command);
 
-        if (!passwordEncoder.matches(command.password(), user.getPassword())) {
-            throw new CommonException(ErrorCode.INVALID_LOGIN_INFO);
+        if (user.getRole() != UserRole.ADMIN) {
+            throw new CommonException(ErrorCode.ADMIN_LOGIN_FORBIDDEN);
         }
 
         return issueTokens(user);
@@ -87,6 +89,21 @@ public class UserCommandServiceImpl implements UserCommandService {
     @Override
     public void logout(Long userId) {
         refreshTokenStore.delete(userId);
+    }
+
+    private User authenticateLocalUser(LoginCommand command) {
+        User user = userRepository.findByEmailAndAuthProvider(command.email(), AuthProvider.LOCAL)
+                .orElseThrow(() -> new CommonException(ErrorCode.INVALID_LOGIN_INFO));
+
+        if (user.isDeleted()) {
+            throw new CommonException(ErrorCode.USER_NOT_FOUND);
+        }
+
+        if (!passwordEncoder.matches(command.password(), user.getPassword())) {
+            throw new CommonException(ErrorCode.INVALID_LOGIN_INFO);
+        }
+
+        return user;
     }
 
     private AuthResult issueTokens(User user) {
