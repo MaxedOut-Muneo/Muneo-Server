@@ -67,6 +67,10 @@ public class AdminUserServiceImpl implements AdminUserService {
         validateNotSelf(authUser, userId);
 
         User user = getUserById(userId);
+        if (user.getRole() == request.role()) {
+            throw new CommonException(ErrorCode.USER_ROLE_ALREADY_ASSIGNED);
+        }
+
         user.changeRole(request.role());
         return AdminUserResponse.from(user);
     }

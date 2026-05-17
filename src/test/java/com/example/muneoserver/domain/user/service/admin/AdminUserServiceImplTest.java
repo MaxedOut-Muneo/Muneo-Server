@@ -56,6 +56,22 @@ class AdminUserServiceImplTest {
     }
 
     @Test
+    void updateUserRoleRejectsSameRole() {
+        User user = createUser(2L, "user@example.com", UserRole.USER);
+        AdminUserRoleUpdateRequest request = new AdminUserRoleUpdateRequest(UserRole.USER);
+
+        when(userRepository.findById(user.getId())).thenReturn(Optional.of(user));
+
+        assertThatThrownBy(() -> adminUserService.updateUserRole(adminUser, user.getId(), request))
+                .isInstanceOf(CommonException.class)
+                .satisfies(exception -> {
+                    CommonException commonException = (CommonException) exception;
+                    assertThat(commonException.getErrorCode()).isEqualTo(ErrorCode.USER_ROLE_ALREADY_ASSIGNED);
+                });
+        assertThat(user.getRole()).isEqualTo(UserRole.USER);
+    }
+
+    @Test
     void deleteUserWithdrawsUserAndDeletesRefreshToken() {
         User user = createUser(2L, "user@example.com", UserRole.USER);
         when(userRepository.findById(user.getId())).thenReturn(Optional.of(user));
