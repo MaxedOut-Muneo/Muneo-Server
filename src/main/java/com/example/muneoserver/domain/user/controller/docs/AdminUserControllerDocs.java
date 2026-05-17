@@ -227,7 +227,7 @@ public interface AdminUserControllerDocs {
             @Min(value = 1, message = "size는 1 이상이어야 합니다.")
             @Max(value = 100, message = "size는 100 이하여야 합니다.")
             int size,
-            @Parameter(description = "이메일, 이름, 전화번호 검색어", example = "user") String keyword,
+            @Parameter(description = "이메일, 이름, 전화번호 검색어") String keyword,
             @Parameter(description = "사용자 권한", example = "USER") UserRole role,
             @Parameter(description = "탈퇴 여부", example = "false") Boolean deleted,
             @Parameter(description = "가입 방식", example = "LOCAL") AuthProvider authProvider,
