@@ -97,6 +97,16 @@ public interface AdminUserControllerDocs {
             }
             """;
 
+    String USER_ROLE_ALREADY_ASSIGNED_EXAMPLE = """
+            {
+              "success": false,
+              "status": 409,
+              "code": "USER_ROLE_ALREADY_ASSIGNED",
+              "timestamp": "2026-05-17T08:00:00Z",
+              "message": "이미 해당 권한을 가진 사용자입니다."
+            }
+            """;
+
     String USER_ALREADY_DELETED_EXAMPLE = """
             {
               "success": false,
@@ -231,7 +241,7 @@ public interface AdminUserControllerDocs {
             @Parameter(description = "사용자 권한", example = "USER") UserRole role,
             @Parameter(description = "탈퇴 여부", example = "false") Boolean deleted,
             @Parameter(description = "가입 방식", example = "LOCAL") AuthProvider authProvider,
-            @Parameter(description = "이메일 인증 여부", example = "true") Boolean emailVerified,
+            @Parameter(description = "이메일 인증 여부", example = "false") Boolean emailVerified,
             @Parameter(description = "프로필 완성 여부", example = "true") Boolean profileCompleted
     );
 
@@ -500,7 +510,7 @@ public interface AdminUserControllerDocs {
                     )
             ),
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "404", description = "사용자를 찾을 수 없음", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, examples = @ExampleObject(value = USER_NOT_FOUND_EXAMPLE))),
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "409", description = "이미 탈퇴 처리된 사용자", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, examples = @ExampleObject(value = USER_ALREADY_DELETED_EXAMPLE))),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "409", description = "이미 해당 권한을 가진 사용자", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, examples = @ExampleObject(value = USER_ROLE_ALREADY_ASSIGNED_EXAMPLE))),
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "500", description = "서버 내부 오류", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, examples = @ExampleObject(value = INTERNAL_SERVER_ERROR_EXAMPLE)))
     })
     ResponseEntity<ApiResponse<AdminUserResponse>> updateUserRole(

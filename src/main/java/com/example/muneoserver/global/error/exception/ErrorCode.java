@@ -16,6 +16,7 @@ public enum ErrorCode {
     ADMIN_ACCESS_FORBIDDEN(403, "ADMIN_ACCESS_FORBIDDEN", "관리자 권한이 필요합니다."),
     ADMIN_SELF_ACTION_FORBIDDEN(403, "ADMIN_SELF_ACTION_FORBIDDEN", "관리자 본인 계정에는 수행할 수 없는 작업입니다."),
     USER_NOT_FOUND(404, "USER_NOT_FOUND", "사용자를 찾을 수 없습니다."),
+    USER_ROLE_ALREADY_ASSIGNED(409, "USER_ROLE_ALREADY_ASSIGNED", "이미 해당 권한을 가진 사용자입니다."),
     USER_ALREADY_DELETED(409, "USER_ALREADY_DELETED", "이미 탈퇴 처리된 사용자입니다."),
     USER_NOT_DELETED(409, "USER_NOT_DELETED", "탈퇴 처리된 사용자가 아닙니다."),
     SOCIAL_SIGNUP_TICKET_EXPIRED(401, "SOCIAL_SIGNUP_TICKET_EXPIRED", "소셜 회원가입 티켓이 만료되었습니다."),
