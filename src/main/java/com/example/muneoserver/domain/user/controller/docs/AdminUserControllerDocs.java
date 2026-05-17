@@ -231,7 +231,7 @@ public interface AdminUserControllerDocs {
             @Parameter(description = "사용자 권한", example = "USER") UserRole role,
             @Parameter(description = "탈퇴 여부", example = "false") Boolean deleted,
             @Parameter(description = "가입 방식", example = "LOCAL") AuthProvider authProvider,
-            @Parameter(description = "이메일 인증 여부", example = "true") Boolean emailVerified,
+            @Parameter(description = "이메일 인증 여부", example = "false") Boolean emailVerified,
             @Parameter(description = "프로필 완성 여부", example = "true") Boolean profileCompleted
     );
 
