@@ -20,7 +20,7 @@ spring:
             client-name: kakao
             authorization-grant-type: authorization_code
             client-authentication-method: client_secret_post
-            redirect-uri: https://api.muneo.ai.kr/login/oauth2/code/kakao
+            redirect-uri: "{baseUrl}/login/oauth2/code/kakao"
         provider:
           kakao:
             authorization-uri: https://kauth.kakao.com/oauth/authorize
@@ -64,7 +64,7 @@ app:
     cookie:
       access-token-name: access_token
       refresh-token-name: refresh_token
-      same-site: ${COOKIE_SAME_SITE:Lax}
+      same-site: ${COOKIE_SAME_SITE:None}
       domain: ${COOKIE_DOMAIN:}
       secure: ${COOKIE_SECURE:false}
     oauth:
