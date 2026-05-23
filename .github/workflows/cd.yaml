@@ -53,6 +53,7 @@ jobs:
           source: "docker-compose.yml,nginx/conf.d/default.conf"
           target: ${{ secrets.EC2_DEPLOY_PATH }}
           strip_components: 0
+          overwrite: true
 
       - name: Deploy on EC2
         uses: appleboy/ssh-action@v1.0.3
@@ -89,5 +90,12 @@ jobs:
 
             docker compose pull app redis nginx
             docker compose up -d --remove-orphans app redis nginx
+
+            # Apply updated bind-mounted nginx config without recreating container
+            docker compose exec -T nginx nginx -t
+            docker compose exec -T nginx nginx -s reload
+
+            # Verify hotfixed directives are present in the running nginx config
+            docker compose exec -T nginx sh -c "grep -n 'risk-detector\\|proxy_read_timeout\\|proxy_request_buffering' /etc/nginx/conf.d/default.conf || true"
 
             docker image prune -f
