@@ -97,6 +97,14 @@ jobs:
             cp -f "${DEPLOY_PATH_PROD}/nginx/conf.d/prod.conf" "${DEPLOY_PATH}/nginx/conf.d/prod.conf"
 
             cd "${DEPLOY_PATH}"
+            # Wait until shared nginx is actually running before exec commands.
+            for i in {1..30}; do
+              if docker compose ps --status running nginx | grep -q "nginx"; then
+                break
+              fi
+              sleep 2
+            done
+
             docker compose exec -T nginx nginx -t
             docker compose exec -T nginx nginx -s reload
             docker compose exec -T nginx sh -c "grep -n 'api-prod.muneo.ai.kr\\|risk-detector\\|proxy_read_timeout\\|proxy_request_buffering' /etc/nginx/conf.d/prod.conf || true"

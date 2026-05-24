@@ -91,6 +91,14 @@ jobs:
             docker compose pull app redis nginx
             docker compose up -d --remove-orphans app redis nginx
 
+            # Wait until nginx is actually running before exec commands.
+            for i in {1..30}; do
+              if docker compose ps --status running nginx | grep -q "nginx"; then
+                break
+              fi
+              sleep 2
+            done
+
             # Apply updated bind-mounted nginx config without recreating container
             docker compose exec -T nginx nginx -t
             docker compose exec -T nginx nginx -s reload
