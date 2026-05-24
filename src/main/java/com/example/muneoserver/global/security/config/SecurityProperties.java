@@ -53,6 +53,7 @@ public record SecurityProperties(
     }
 
     public record Oauth(
+            String kakaoLoginUrl,
             String frontendSuccessUri,
             String frontendSignupUri,
             String frontendFailureUri,

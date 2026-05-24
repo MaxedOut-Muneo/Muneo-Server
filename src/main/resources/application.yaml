@@ -68,6 +68,7 @@ app:
       domain: ${COOKIE_DOMAIN:}
       secure: ${COOKIE_SECURE:false}
     oauth:
+      kakao-login-url: ${OAUTH_KAKAO_LOGIN_URL:https://api.muneo.ai.kr/oauth2/authorization/kakao}
       frontend-success-uri: ${OAUTH_FRONTEND_SUCCESS_URI:http://localhost:3000/auth/callback/success}
       frontend-signup-uri: ${OAUTH_FRONTEND_SIGNUP_URI:http://localhost:3000/auth/callback/signup}
       frontend-failure-uri: ${OAUTH_FRONTEND_FAILURE_URI:http://localhost:3000/auth/callback/error}

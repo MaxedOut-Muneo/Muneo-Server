@@ -26,8 +26,6 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 @Transactional
 public class OAuth2LoginServiceImpl implements OAuth2LoginService {
-    private static final String KAKAO_OAUTH_START_URL = "https://api.muneo.ai.kr/oauth2/authorization/kakao";
-
     private final UserRepository userRepository;
     private final JwtTokenProvider jwtTokenProvider;
     private final RefreshTokenStore refreshTokenStore;
@@ -37,7 +35,7 @@ public class OAuth2LoginServiceImpl implements OAuth2LoginService {
 
     @Override
     public String getKakaoLoginUrl() {
-        return KAKAO_OAUTH_START_URL;
+        return securityProperties.oauth().kakaoLoginUrl();
     }
 
     @Override
