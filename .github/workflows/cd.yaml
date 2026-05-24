@@ -50,7 +50,7 @@ jobs:
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_SSH_KEY }}
           port: ${{ secrets.EC2_PORT }}
-          source: "docker-compose.yml,nginx/conf.d/default.conf"
+          source: "docker-compose.yml,nginx/conf.d/default.conf,nginx/conf.d/prod.conf"
           target: ${{ secrets.EC2_DEPLOY_PATH }}
           strip_components: 0
           overwrite: true
